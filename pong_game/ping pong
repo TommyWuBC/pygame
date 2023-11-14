@@ -1,0 +1,208 @@
+import pygame
+import random
+
+pygame.font.init()
+
+swidth = 1080
+sheight = 750
+size = (swidth, sheight)
+screen = pygame.display.set_mode(size)
+pygame.display.set_caption("Pong game")
+
+# Define colors
+WHITE = (255, 255, 255)
+GREY = (200, 200, 200)
+RED = (229, 44, 0)
+BLUE = (2, 126, 188)
+BLACK = (88, 89, 91)
+
+ball = pygame.Rect(swidth / 2 - 15, sheight / 2 - 15, 30, 30)
+player1 = pygame.Rect(swidth - 20, sheight / 2 - 65, 10, 130)
+player2 = pygame.Rect(10, sheight / 2 - 65, 10, 130)
+speedx = 6 * random.choice((1, -1))
+speedy = 6 * random.choice((1, -1))
+speed1 = 0
+speed2 = 0
+speedslow = 6
+speedfast = 9
+score1 = 0
+score2 = 0
+if ball.left <= 0:
+    score1 += 1
+elif ball.right >= swidth:
+    score2 += 1
+
+game_font = pygame.font.Font(None, 70)
+score_time = True
+
+def draw_start_screen():
+    screen.fill(WHITE)
+    font = pygame.font.Font(None, 36)
+    text = font.render("Type '1' for Single Player or '2' for Multiplayer", True, BLACK)
+    text_rect = text.get_rect(center=(swidth // 2, sheight // 2))
+    screen.blit(text, text_rect)
+    pygame.display.update()
+
+def draw_single_player_controls():
+    font = pygame.font.Font(None, 36)
+    text = font.render("Choose controls: 'W/S' or 'Up/Down'", True, BLACK)
+    text_rect = text.get_rect(center=(swidth // 2, sheight // 2 + 50))
+    screen.blit(text, text_rect)
+    pygame.display.update()
+
+# Existing animation, restart, and movement functions
+def animation():
+    global speedx, speedy, score1, score2, score_time
+    ball.x += speedx
+    ball.y += speedy
+    if ball.top <= 0 or ball.bottom >= sheight:
+        speedy *= -1.01
+    if ball.left <= 0:
+        score1 += 1
+        score_time = pygame.time.get_ticks()
+    elif ball.right >= swidth:
+        score2 += 1
+        score_time = pygame.time.get_ticks()
+    if ball.colliderect(player1) and speedx > 0:
+        if abs(ball.right - player1.left) < 10:
+            speedx *= -1.01
+        elif abs(ball.bottom - player1.top) < 10 and speedy > 0:
+            speedy *= -1
+        elif abs(ball.top - player1.bottom) < 10 and speedy < 0:
+            speedy *= -1
+    if ball.colliderect(player2) and speedx < 0:
+        if abs(ball.left - player2.right) < 10:
+            speedx *= -1.01
+        elif abs(ball.bottom - player2.top) < 10 and speedy > 0:
+            speedy *= -1
+        elif abs(ball.top - player2.bottom) < 10 and speedy < 0:
+            speedy *= -1
+
+def restart():
+    global speedx, speedy, current_time, score_time
+    current_time = pygame.time.get_ticks()
+    ball.center = (swidth / 2, sheight / 2)
+    player1.midright = (swidth, sheight / 2)
+    player2.midleft = (0, sheight / 2)
+    if current_time - score_time < 700:
+        three = game_font.render("3", False, BLACK)
+        screen.blit(three, (swidth / 2 - 12, sheight / 2 + 20))
+    if 700 < current_time - score_time < 1400:
+        two = game_font.render("2", False, BLACK)
+        screen.blit(two, (swidth / 2 - 12, sheight / 2 + 20))
+    if 1400 < current_time - score_time < 2100:
+        one = game_font.render("1", False, BLACK)
+        screen.blit(one, (swidth / 2 - 12, sheight / 2 + 20))
+    if current_time - score_time < 2100:
+        speedx, speedy = 0, 0
+    else:
+        speedy = 6 * random.choice((1, -1))
+        speedx = 6 * random.choice((1, -1))
+        score_time = None
+
+def movement():
+    global speed1, speed2
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_DOWN:
+            speed1 += 11
+        if event.key == pygame.K_UP:
+            speed1 -= 11
+    if event.type == pygame.KEYUP:
+        if event.key == pygame.K_DOWN:
+            speed1 -= 11
+        if event.key == pygame.K_UP:
+            speed1 += 11
+
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_s:
+            speed2 += 11
+        if event.key == pygame.K_w:
+            speed2 -= 11
+    if event.type == pygame.KEYUP:
+        if event.key == pygame.K_s:
+            speed2 -= 11
+        if event.key == pygame.K_w:
+            speed2 += 11
+
+def move_ai(ai_paddle, ball, ai_speed, player_choice):
+    if player_choice == '1':
+        if ball.x > swidth / 2:
+            if ball.centery > ai_paddle.centery:
+                ai_paddle.y += ai_speed
+            elif ball.centery < ai_paddle.centery:
+                ai_paddle.y -= ai_speed
+    else:
+        if ball.x < swidth / 2:
+            if ball.centery > ai_paddle.centery:
+                ai_paddle.y += ai_speed
+            elif ball.centery < ai_paddle.centery:
+                ai_paddle.y -= ai_speed
+    ai_paddle.y = max(0, min(ai_paddle.y, sheight - ai_paddle.height))
+
+# Main game loop
+game_mode = None
+single_player_controls = None
+done = False
+clock = pygame.time.Clock()
+
+while not done:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+        if game_mode is None:
+            if event.type == pygame.KEYDOWN:
+                if event.unicode == '1':
+                    game_mode = 'single'
+                    draw_single_player_controls()
+                elif event.unicode == '2':
+                    game_mode = 'multi'
+                else:
+                    draw_start_screen()
+                    font = pygame.font.Font(None, 36)
+                    invalid_text = font.render("Invalid option, please try again", True, RED)
+                    text_rect = invalid_text.get_rect(center=(swidth // 2, sheight // 2 + 100))
+                    screen.blit(invalid_text, text_rect)
+                    pygame.display.update()
+        elif game_mode == 'single' and single_player_controls is None:
+            if event.type == pygame.KEYDOWN:
+                if event.unicode == 'w' or event.unicode == 's':
+                    single_player_controls = event.unicode
+                elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
+                    single_player_controls = event.key
+                else:
+                    draw_single_player_controls()
+
+    if game_mode == 'single' and single_player_controls is not None:
+        animation()
+        movement()
+        move_ai(player2, ball, 8, '1')
+        player1.y += speed1
+        if player1.top <= 0:
+            player1.top = 0
+        if player1.bottom >= sheight:
+            player1.bottom = sheight
+    elif game_mode == 'multi':
+        animation()
+        movement()
+        player1.y += speed1
+        if player1.top <= 0:
+            player1.top = 0
+        if player1.bottom >= sheight:
+            player1.bottom = sheight
+        player2.y += speed2
+        if player2.top <= 0:
+            player2.top = 0
+        if player2.bottom >= sheight:
+            player2.bottom = sheight
+        if score_time:
+            restart()
+
+    text1 = game_font.render(f"{score1}", False, BLUE)
+    screen.blit(text1, ((swidth / 2) + 72, (sheight / 2) - 300))
+    text2 = game_font.render(f"{score2}", False, RED)
+    screen.blit(text2, ((swidth / 2) - 100, (sheight / 2) - 300))
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()

@@ -1,0 +1,100 @@
+import pygame 
+from pygame import mixer
+# Define some colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GREEN = (76,200,68)
+RED = (230,88,2)
+BLUE = (160,219,231)
+BAIGE = (253,233,219)
+BROWN = (128, 90, 64)
+YELLOW = (254,210,43)
+BLACK = (43, 50, 70)
+WHITE = (221, 221, 221)
+DGREEN = (56,148,2)
+DRED = (139, 0, 0)
+DBAIGE = (211, 211, 211)
+DBROWN = (93,40,0)
+DYELLOW = (181, 144, 75)
+pygame.init()
+ 
+# Set the width and height of the screen [width, height]
+size = (700, 500)
+screen = pygame.display.set_mode(size)
+ 
+pygame.display.set_caption("My Game")
+ 
+# Loop until the user clicks the close button.
+done = False
+ 
+# Used to manage how fast the screen updates
+clock = pygame.time.Clock()
+x = 0
+y = 400
+count = 0
+cycle=0
+# -------- Main Program Loop -----------
+while not done:
+    # --- Main event loop
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+ 
+    # --- Game logic should go here
+ 
+    # --- Screen-clearing code goes here
+ 
+    # Here, we clear the screen to white. Don't put other drawing commands
+    # above this, or they will be erased with this command.
+ 
+    # If you want a background image, replace this clear with blit'ing the
+    # background image.
+    screen.fill(WHITE)
+ 
+    # --- Drawing code should go here
+    if cycle==0:
+        pygame.draw.rect(screen,BLUE,[0,0,700,350])
+        pygame.draw.circle(screen,YELLOW,[x,y],50)
+        pygame.draw.rect(screen,GREEN,[0,350,700,500],0)
+        pygame.draw.rect(screen,BAIGE,[250,250,200,200])
+        pygame.draw.polygon(screen,RED,[[350,150],[250,250],[450,250]])
+        pygame.draw.rect(screen,BLUE,[275,275,45,45])
+        pygame.draw.rect(screen,BLUE,[380,275,45,45])
+        pygame.draw.rect(screen,BROWN,[320,360,60,90])
+        pygame.draw.circle(screen,YELLOW,[365,400],5)
+    elif cycle==1:
+        pygame.draw.rect(screen,BLACK,[0,0,700,350])
+        pygame.draw.circle(screen,WHITE,[x,y],37)
+        pygame.draw.circle(screen, BLACK,[x+10,y-10],30)
+        pygame.draw.rect(screen,DGREEN,[0,350,700,500],0)
+        pygame.draw.rect(screen,DBAIGE,[250,250,200,200])
+        pygame.draw.polygon(screen,DRED,[[350,150],[250,250],[450,250]])
+        pygame.draw.rect(screen,BLACK,[275,275,45,45])
+        pygame.draw.rect(screen,BLACK,[380,275,45,45])
+        pygame.draw.rect(screen,DBROWN,[320,360,60,90])
+        pygame.draw.circle(screen,DYELLOW,[365,400],5)
+    
+
+    # --- Go ahead and update the screen with what we've drawn.
+    pygame.display.flip()
+    x += 2
+    count += 4/175
+    y += count-4
+
+    if y >= 500:
+        x=0
+        y=400
+        count=0
+        if cycle==0:
+            cycle=cycle+1
+        elif cycle==1:
+            cycle=cycle-1
+            
+    
+
+    
+    # --- Limit to 60 frames per second
+    clock.tick(50)
+ 
+# Close the window and quit.
+pygame.quit()

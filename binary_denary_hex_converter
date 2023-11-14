@@ -1,0 +1,16 @@
+while True:
+    format=input("enter the format of the value: 1. binary, 2.denary, 3.hexadecimal")
+    if format=="1" or format=="2" or format=="3":
+        break
+    else:
+        print("Try again, only pick 1/2/3")
+while True:
+    conv=input("enter the value you wish to covert into: 1. binary, 2. denary, 3.hexadecimal")
+    if (conv=="1" or conv=="2" or conv=="3") and format!=conv:
+        break
+    else:
+        print("invalid option, try again!")
+
+if format=="1" and conv=="2":
+    binary=input("")
+

@@ -1,0 +1,43 @@
+def ValueOf(status):
+    match status:
+        case "red":
+            return 9
+        case "blue":
+            return 7
+        case "green":
+            return 6
+        case "yellow":
+            return 4
+        case "white":
+            return 1
+        case "black":
+            return 2
+        case "brown":
+            return 3
+        case "purple":
+            return 5
+        case "orange":
+            return 8
+        case "pink":
+            return 0
+    
+colour1=input("enter the colour of band 1")
+colour2=input("enter the colour of band 2")
+colour3=input("enter the colour of band 3")
+colour0="0"
+colour1=str(ValueOf(colour1))
+colour2=str(ValueOf(colour2))
+colour3=ValueOf(colour3)
+if colour3<3:
+    for i in range(colour3-1):
+        colour0=colour0+"0"
+elif colour3==3:
+    colour0="k"
+elif colour3>3:
+    for i in range(colour3-4):
+        colour0=colour0+"0"
+    colour0=colour0+"k"
+if colour3==0:
+    print("resistance=",colour1+colour2,"Ω")
+else:
+    print("resistance=",colour1+colour2+colour0,"Ω")

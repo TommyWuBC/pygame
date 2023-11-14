@@ -1,0 +1,13 @@
+
+def multiples(pupilName,table,startnum,endnum):
+    print("Hi", pupilName,", here is the times table for", table,":")
+    num=int(startnum)
+    for i in range(endnum-startnum+1):
+        print(table,"x",num,"=",table*num)
+        num=num+1
+pupilName=input("What is your name?")
+table=int(input("What number's times table are you looking for?"))
+startnum=int(input("enter the starting number to multiply by"))
+endnum=int(input("enter the end number to multiply by"))
+multiples(pupilName,table,startnum,endnum)
+

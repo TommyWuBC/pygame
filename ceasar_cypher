@@ -1,0 +1,17 @@
+msg=input("enter the message you wish to encrypt: ")
+msg=msg.upper()
+offset=int(input("enter the value to shift back by: "))
+encrypted_msg=""
+
+for i in range (len(msg)):
+    if msg[i]=="":
+        encrypted_msg=encrypted_msg
+    else:
+        val = ord(msg[i])
+        val=val+offset
+        val = ((val-65)%26)+65
+
+        new_char=chr(val)
+        encrypted_msg=encrypted_msg + new_char
+
+print(encrypted_msg)

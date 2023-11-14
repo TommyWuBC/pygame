@@ -1,0 +1,13 @@
+while True:
+    word = input("enter a word or phrase to be texted:")
+    mylist = []
+    for character in word:
+        mylist.append(character)
+    reverse_word=""
+    for i in range(len(mylist)):
+        reverse_word += mylist.pop()
+
+    if word == reverse_word:
+        print("its a palindrome")
+    else:
+        print("its not a palindrome")

@@ -1,0 +1,42 @@
+import random
+while True:
+    option=int(input("Would you like to 1.calculate a power, 2.list squares and cubes, 3.practice squares/cubes?"))
+    if option!=1 and option!=2 and option!=3:
+        print("invalid input, please try again")
+    else:
+        break
+
+if option==1:
+    num=float(input("enter the base number: "))
+    power=float(input("enter the power: "))
+    ans=num**power
+    print(num,"^",power,"=",ans)
+
+if option==2:
+    count=1
+    for i in range(26):
+        print(count,"^2 =",count**2)
+        print(count,"^3 =",count**3)
+        count=count+1
+
+if option==3:
+    print("practice with 5 questions")
+    points=0
+    for i in range(5):
+        num=random.randint(2,20)
+        power=random.randint(2,3)
+        ans=num**power
+        num=str(num)
+        power=str(power)
+        question=int(input("what is"+num+"^"+power+"?"))
+        if question==ans:
+            print("correct!")
+            points=points+1
+        else:
+            print("incorrect")
+            points=points+0
+    print("you got",points,"out of 5 questions correct")
+
+
+
+        
