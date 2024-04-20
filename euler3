@@ -1,0 +1,11 @@
+def highestprimefactor(num):
+    while num/2==0:
+        num=num/2
+    factor=3
+    while num>1:
+        while num%factor==0:
+           num=num/factor
+        factor+=2
+    print(factor-2)    
+
+highestprimefactor(600851475143)

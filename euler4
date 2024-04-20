@@ -1,0 +1,6 @@
+def checkpalindrome(n):
+    n=n.lower()
+    if n==n[::-1]:
+        print(n, "is a palindrome")
+
+checkpalindrome("racecar")
